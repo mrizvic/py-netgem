@@ -77,7 +77,7 @@ KeyboardInterrupt
 
 # Documentation
 
-See [netgem.html](netgem.html) for details or run `pydoc netgem`.
+See [netgem.txt](netgem.txt) for details or run `pydoc netgem`.
 
 # Installation
 
