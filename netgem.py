@@ -9,7 +9,8 @@ import os
 
 class Netgem(object):
 	'''
-	Manipulate with NETGEM STB over IPv4
+	Manipulate with NETGEM STB over IPv4 (emulate remote control commands) and spawn pop-up notifications.
+
 	'''
 
 	def __init__(self,ip,delay=0.1,timeout=5):
@@ -23,6 +24,33 @@ class Netgem(object):
 		self.verbose = False
 		self.tca = 'x\x9c\xb3IL.\xc9\xcc\xcfS\xc8K\xccM\xb5U\x02\x00&,\x04\xdb'
 		self.udb = 'x\x9c\xb3\xd1OL.\xc9\xcc\xcf\xb3\x03\x00\x0e\xe5\x03('
+		self.ip = ip
+		self.pictograms=[
+			"WARNING",
+			"INFO",
+			"TIMERS",
+			"NETWORK",
+			"PARENTAL",
+			"WIFI",
+			"SMCARD",
+			"USB",
+			"TRASH",
+			"PROCESSING",
+			"DOT",
+			"FAVORITE",
+			"NONE",
+			"GENERIC666"
+			"NETGEM"
+			"RECORDING"
+			"USB"
+		]
+
+		self.types=[
+			"confirm",
+			"error",
+			"neutral"
+		]
+
 
 
 	def __Request(self,url,values):
@@ -231,6 +259,88 @@ class Netgem(object):
 			for i in xrange(sendtimes):
 				self.send_key(sendkey)
 			oldkey=sendkey
+
+	###################### NOTIFICATIONS ########################		
+
+	def notify(self, msg, timeout=2000, pictogram='NONE', type='confirm'):
+		'''
+		Raise notification bar on STB
+
+		msg			-	message to appear
+		timeout		-	time before notification disappears (in milliseconds)
+		pictogram 	-	icon used in notification area
+		type		-	background color of notification
+
+		Possible values for pictogram are: 
+		"WARNING"
+		"INFO"
+		"TIMERS"
+		"NETWORK"
+		"PARENTAL"
+		"WIFI"
+		"SMCARD"
+		"USB"
+		"TRASH"
+		"PROCESSING"
+		"DOT"
+		"FAVORITE"
+		"NONE"
+		"GENERIC666"
+		"NETGEM"
+		"RECORDING"
+		"USB"
+
+		Possible values for notification are:
+		"confirm" (green)
+		"error" (orange)
+		"neutral" (grey)
+		'''
+
+		if msg=="":
+			raise ValueError('msg string seems empty')
+
+		url='http://{0}/TS/status'.format(self.ip)
+		data={'n':type,'p':pictogram,'t':timeout,'msg':msg}
+		data=urllib.urlencode(data)
+		
+		try:
+			headers = { 'User-Agent' : 'python-script' }
+			request=urllib2.Request(url,data,headers)
+			response=urllib2.urlopen(request,timeout=1)
+			buffer=response.read()
+			return buffer
+		except Exception as e:
+			print 'Exception {}'.format(e)
+			pass
+
+	def html(self, url, w=721, h=500, x=780, y=0, timeout=4000, opaque=255):
+		'''
+		Retrieve content from url and render it in overlay widget. Kinda looks like on screen display.
+
+		url			-	url from which content is retrieved
+		timeout		-	time in milliseconds before content disappears
+		opaque		-	transparency (255 = 100% transparent)
+		w,h,x,y		-	width, height and x, y size of rendering widget
+
+		'''
+		if url=="":
+			raise ValueError('url is missing')
+
+		stburl='http://{0}/TS/html'.format(self.ip)
+		data={'url': url, 'w':w, 'h':h, 'x':x, 'y':y, 'dur': timeout, 'a': opaque}
+		data=urllib.urlencode(data)
+
+		try:
+			headers = { 'User-Agent' : 'python-script' }
+			request=urllib2.Request(stburl,data,headers)
+			response=urllib2.urlopen(request,timeout=1)
+			buffer=response.read()
+			return buffer
+		except Exception as e:
+			print 'Exception {}'.format(e)
+			pass
+
+	################## END OF NOTIFICATIONS #####################
 
 
 def main():
