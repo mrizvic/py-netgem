@@ -31,6 +31,46 @@ CLASSES
      |  get_volume(self)
      |      Read current volume setting
      |  
+     |  html(self, url, w=721, h=500, x=780, y=0, timeout=4000, opaque=255)
+     |      Retrieve content from url and render it in overlay widget. Kinda looks like on screen display.
+     |      
+     |      url                     -       url from which content is retrieved
+     |      timeout         -       time in milliseconds before content disappears
+     |      opaque          -       transparency (255 = 100% transparent)
+     |      w,h,x,y         -       width, height and x, y size of rendering widget
+     |  
+     |  notify(self, msg, timeout=2000, pictogram='NONE', type='confirm')
+     |      Raise notification bar on STB
+     |      
+     |      msg                     -       message to appear
+     |      timeout         -       time before notification disappears (in milliseconds)
+     |      pictogram       -       icon used in notification area
+     |      type            -       background color of notification
+     |      
+     |      Possible values for pictogram are: 
+     |      "WARNING"
+     |      "INFO"
+     |      "TIMERS"
+     |      "NETWORK"
+     |      "PARENTAL"
+     |      "WIFI"
+     |      "SMCARD"
+     |      "USB"
+     |      "TRASH"
+     |      "PROCESSING"
+     |      "DOT"
+     |      "FAVORITE"
+     |      "NONE"
+     |      "GENERIC666"
+     |      "NETGEM"
+     |      "RECORDING"
+     |      "USB"
+     |      
+     |      Possible values for notification are:
+     |      "confirm" (green)
+     |      "error" (orange)
+     |      "neutral" (grey)
+     |  
      |  send_key(self, key='OK')
      |      Sends a key to the box. List of supported keys:
      |      * on_off
