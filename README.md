@@ -98,3 +98,6 @@ import os
 
 I constructed this code in 2014 with reverse engineering methods on android application that was available in [google play store](https://play.google.com/store/apps/details?id=netgem.siol)
 I will not and cannot be held responsible for any damage you may harm using code and documentation from this repository.
+
+# Coffee
+If you find this useful you can buy me a coffee :) https://ko-fi.com/markor
